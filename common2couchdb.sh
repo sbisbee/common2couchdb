@@ -1,34 +1,18 @@
 #!/bin/sh
-# common2couchdb version 0.1.0
-# by Sam Bisbee <sbisbee@computervip.com> on 2009-11-23 at 1700 -0500
-#
+# Copyright 2009 Sam Bisbee
 # 
+# Licensed under the Apache License, Version 2.0 (the "License"); you may not
+# use this file except in compliance with the License.  You may obtain a copy
+# of the License at
 #
-# Takes a common log formatted web server log (ex., Apache access logs) over
-# stdin and stores each entry in a JSON array. You can easily add extra fields
-# to the objects for your use (ex., adding a meaningful _id for storing in
-# CouchDB).
+#      http://www.apache.org/licenses/LICENSE-2.0
+# 
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
+# License for the specific language governing permissions and limitations under
+# the License.
 #
-# Each log entry gets put into this format (note: all values are strings):
-# {
-#   "host": "",       //hostname or IP
-#   "user": "",       //the user doing the requesting
-#   "identifier": "", //the user's identifier
-#   "timestamp": "",  //format: dd/MMM/yyyy/:hh/:mm/:ss/ +-hhmm
-#   "request": "",    //the HTTP request line
-#   "httpStatus": "", //valid HTTP status code
-#   "bytes": ""       //size of response in bytes
-# }
-#
-# Note, most web servers will output a "-" if a piece of information is missing
-# (ex., user) or inappropriate (ex., bytes on a HTTP 304). We don't check to
-# see if a value is filled, we just pass through what's in the log. 
-#
-# Output is on stdout, so feel free to pipe to a file, ncurses, etc.
-#
-# Wish List:
-# * Allow user to specify a min, or start, date to avoid duplication and
-#   generally unhappy work.
 
 #Open up shop.
 echo -n "{\"docs\": ["

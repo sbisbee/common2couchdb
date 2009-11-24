@@ -1,0 +1,62 @@
+common2couchdb
+==============
+
+Version 0.1.
+
+Wrote this for fun and educational purposes because of a mailing list post:
+http://mail-archives.apache.org/mod_mbox/couchdb-user/200911.mbox/%3C15b2d9090911231348u69a40deu37583520334f2317@mail.gmail.com%3E
+
+It takes a common log formatted web server log and turns it into a bulk insert
+command for CouchDB. Nothing will make sense if you feed it a web server log
+that isn't in the common log format unless you're really lucky.
+
+Dependencies
+------------
+
+* couchdb >= 0.9.x
+* sed
+* readline support
+* sh
+
+How to Use It
+-------------
+
+The package accepts common log formatted web server logs via stdin, and then
+outputs the resulting bulk insert to stdout. The output isn't very human
+friendly, because I assume you'll be sending it out over the wire and don't
+want to waste time on white space.
+
+Most basic usage example (everything ends up in your console):
+./common2couchdb.sh < /var/log/apache2/access.log
+
+Second most basic usage example (everything ends up in ./a.out):
+./common2couchdb.sh < /var/log/apache2/access.log > ./a.out
+
+The Document
+------------
+
+Each log entry gets put into this format (note: all values are strings):
+
+{
+  "host": "",       //hostname or IP
+  "user": "",       //the user doing the requesting
+  "identifier": "", //the user's identifier
+  "timestamp": "",  //format: dd/MMM/yyyy/:hh/:mm/:ss/ +-hhmm
+  "request": "",    //the HTTP request line
+  "httpStatus": "", //valid HTTP status code
+  "bytes": ""       //size of response in bytes
+}
+
+Note, most web servers will output a "-" if a piece of information is missing
+(ex., user) or inappropriate. We don't check to see if a value is filled, we
+just pass through what's in the log. 
+
+There is currently no way to add fields on the command line, so you'll have to
+edit the source for now (ex., adding an _id).
+
+Wishlist
+--------
+ * Allow the user to specify an _id value on the command line.
+ * Allow the user to specify a min, or start, date. This will prevent creating
+   duplicates, unnecessary reading of the whole log file, etc.
+
