@@ -70,6 +70,4 @@ edit the source for now (ex., adding an _id).
 Wishlist
 --------
  * Allow the user to specify an _id value on the command line.
- * Allow the user to specify a min, or start, date. This will prevent creating
-   duplicates, unnecessary reading of the whole log file, etc.
 
