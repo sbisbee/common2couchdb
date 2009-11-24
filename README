@@ -17,6 +17,19 @@ Dependencies
 * sed
 * readline support
 * sh
+* tr
+* awk
+* date
+* getopts
+
+Options
+-------
+
+-s      Allows you to specify a start date, meaning that only log entires
+        greater than or equal to the date will be in the output. Ex., 
+        `./common2couchdb -s "Nov 24, 2009 17:16" < ./log` will only include
+        log entries made at or after November 24th, 2009 at 17:16. Remember to
+        take your local system time and time zone settings into account.
 
 How to Use It
 -------------
