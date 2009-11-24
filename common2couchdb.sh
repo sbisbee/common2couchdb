@@ -12,7 +12,35 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the
 # License for the specific language governing permissions and limitations under
 # the License.
-#
+
+usage()
+{
+  echo "$0 [-s\"Nov 24, 2009 17:12\"]"
+}
+
+#min unix timestamp
+minTime=0
+
+while getopts s: flag
+do
+  case "$flag"
+  in
+    s)  
+      minTime=`date +%s -d"$OPTARG"`
+      if test $? -ne 0
+      then
+        #bad timestamp (or its format)
+        usage
+        exit 1
+      fi
+      ;;
+
+    [?])
+      usage
+      exit 1
+      ;;
+  esac
+done
 
 #Open up shop.
 echo -n "{\"docs\": ["
@@ -25,6 +53,16 @@ while read line
 do
   #Store our two globbers...
   timestamp=`echo -n $line | sed -e 's/^.*\[\(.*\)\].*$/\1/'`
+
+  unixTime=`echo "$timestamp" | tr [/:] " " | awk '{printf "%s %s, %s %s:%s:%s", $2, $1, $3, $4, $5, $6;}'`
+  unixTime=`date +%s -d"$unixTime"`
+
+  if test $unixTime -lt $minTime
+  then
+    continue
+  fi
+  unset unixTime
+
   request=`echo -n $line | sed -e 's/^.*"\(.*\)".*$/\1/'`
 
   #...and then remove them so that we can...
